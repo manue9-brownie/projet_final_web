@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Medicamentos - SGM</title>
+</head>
+
+<body>
+
+<h1>Lista de Medicamentos</h1>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Princípio Ativo</th>
+        <th>Quantidade</th>
+        <th>Validade</th>
+        <th>Horário</th>
+        <th>Ações</th>
+    </tr>
+
+
+    <tr th:each="medicamento : ${medicamentos}">
+
+        <td th:text="${medicamento.id}"></td>
+
+        <td th:text="${medicamento.nome}"></td>
+
+        <td th:text="${medicamento.principioAtivo}"></td>
+
+        <td th:text="${medicamento.quantidade}"></td>
+
+        <td th:text="${medicamento.validade}"></td>
+
+        <td th:text="${medicamento.horario}"></td>
+
+        <td>
+            <a href="/editar">
+                Editar
+            </a>
+
+            <a href="/excluir">
+                Excluir
+            </a>
+        </td>
+
+    </tr>
+
+
+</table>
+
+
+<br>
+
+<a href="/cadastro">
+    Cadastrar novo medicamento
+</a>
+
+<br><br>
+
+<a href="/inicio">
+    Voltar ao início
+</a>
+
+
+</body>
+
+</html>

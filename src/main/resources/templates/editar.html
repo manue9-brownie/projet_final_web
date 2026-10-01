@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Medicamento - SGM</title>
+</head>
+
+<body>
+
+<h1>Editar Medicamento</h1>
+
+
+<form action="/editar" method="post">
+
+    <input type="hidden" name="id">
+
+
+    <label>Nome do medicamento:</label>
+    <br>
+    <input type="text" name="nome">
+
+    <br><br>
+
+
+    <label>Princípio ativo:</label>
+    <br>
+    <input type="text" name="principioAtivo">
+
+    <br><br>
+
+
+    <label>Quantidade:</label>
+    <br>
+    <input type="number" name="quantidade">
+
+    <br><br>
+
+
+    <label>Validade:</label>
+    <br>
+    <input type="date" name="validade">
+
+    <br><br>
+
+
+    <label>Horário:</label>
+    <br>
+    <input type="time" name="horario">
+
+    <br><br>
+
+
+    <button type="submit">
+        Salvar alterações
+    </button>
+
+
+</form>
+
+
+<br>
+
+<a href="/lista">
+    Voltar para lista
+</a>
+
+
+</body>
+
+</html>

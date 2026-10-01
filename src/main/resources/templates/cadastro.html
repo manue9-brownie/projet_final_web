@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Medicamentos - SGM</title>
+</head>
+
+<body>
+
+<h1>Cadastro de Medicamentos</h1>
+
+<form action="/salvar" method="post">
+
+    <label>Nome do medicamento:</label>
+    <br>
+    <input type="text" name="nome">
+
+    <br><br>
+
+    <label>Princípio ativo:</label>
+    <br>
+    <input type="text" name="principioAtivo">
+
+    <br><br>
+
+    <label>Quantidade:</label>
+    <br>
+    <input type="number" name="quantidade">
+
+    <br><br>
+
+    <label>Validade:</label>
+    <br>
+    <input type="date" name="validade">
+
+    <br><br>
+
+    <label>Horário de uso:</label>
+    <br>
+    <input type="time" name="horario">
+
+    <br><br>
+
+    <button type="submit">
+        Cadastrar
+    </button>
+
+</form>
+
+<br>
+
+<a href="/inicio">
+    Voltar ao início
+</a>
+
+</body>
+
+</html>
