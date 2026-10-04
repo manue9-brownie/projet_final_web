@@ -11,7 +11,7 @@
         <div class="page-heading"><div><p class="eyebrow">Rotina de cuidados</p><h1><span class="heading-icon">◷</span>Horários e Lembretes</h1><p>Acompanhe os horários de uso informados para cada medicamento.</p></div><a class="button" th:href="@{/cadastro}">＋ Novo medicamento</a></div>
         <section class="stats-grid">
             <article class="card stat-card"><span class="stat-icon green">◷</span><div><strong class="stat-value" th:text="${#lists.size(proximosHorarios)}">0</strong><span class="stat-label">Próximas doses programadas</span></div></article>
-            <article class="card stat-card"><span class="stat-icon">✓</span><div><strong class="stat-value" th:text="${#lists.isEmpty(proximosHorarios) ? '—' : proximosHorarios[0].horario}">—</strong><span class="stat-label">Próximo horário</span></div></article>
+            <article class="card stat-card"><span class="stat-icon">✓</span><div><strong class="stat-value" th:text="${#lists.isEmpty(proximosHorarios) ? '—' : proximosHorarios[0].horario}">—</strong><span class="stat-label" th:text="${#lists.isEmpty(proximosHorarios) ? 'Sem horário cadastrado' : (minutosAteProximaDose == 0 ? 'Lembrete: agora' : 'Lembrete em ' + minutosAteProximaDose + ' min')}">Próximo lembrete</span></div></article>
             <article class="card stat-card"><span class="stat-icon purple">♧</span><div><strong class="stat-value" th:text="${#lists.size(alertasProximasDoses)}">0</strong><span class="stat-label">Alertas de estoque nas próximas doses</span></div></article>
         </section>
         <section class="card card-pad">

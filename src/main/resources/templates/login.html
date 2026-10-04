@@ -13,10 +13,14 @@
         <h1>SGM</h1>
         <p>Sistema de Gestão de Medicamentos</p>
     </div>
-    <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" placeholder="Digite seu e-mail"></div>
-    <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha"></div>
-    <a class="button" th:href="@{/inicio}">Entrar</a>
-    <div class="login-note"><span>ⓘ</span> Tela de protótipo; autenticação ainda não está habilitada.</div>
+    <p th:if="${param.erro}" style="color:#c54848;text-align:center">E-mail ou senha incorretos.</p>
+    <p th:if="${param.registrado}" style="color:#13814d;text-align:center">Conta criada. Faça login.</p>
+    <form th:action="@{/login}" method="post">
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="username" placeholder="Digite seu e-mail" required></div>
+        <div class="field"><label for="senha">Senha</label><input id="senha" name="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required></div>
+        <button class="button" type="submit">Entrar</button>
+    </form>
+    <p class="login-register" style="text-align:center">Ainda não tem conta? <a th:href="@{/registrar}">Cadastre-se</a></p>
     <p class="login-footer">SGM - Sistema de Gestão de Medicamentos<br>© 2026 · Todos os direitos reservados.</p>
 </main>
 </body>

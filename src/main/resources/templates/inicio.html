@@ -24,7 +24,7 @@
             <article class="card card-pad">
                 <div class="card-title-row"><h2>Próximos horários</h2><a class="text-link" th:href="@{/horarios}">Ver todos</a></div>
                 <div class="mini-list">
-                    <div class="mini-row" th:each="medicamento : ${proximosHorarios}"><span class="time-pill" th:text="${medicamento.horario}">08:00</span><div class="row-main"><strong th:text="${medicamento.nome}">Medicamento</strong><small th:text="${medicamento.principioAtivo}">Princípio ativo</small></div><span class="badge">Próxima dose</span></div>
+                    <div class="mini-row" th:each="medicamento, status : ${proximosHorarios}"><span class="time-pill" th:text="${medicamento.horario}">08:00</span><div class="row-main"><strong th:text="${medicamento.nome}">Medicamento</strong><small th:if="${status.index == 0}" th:text="${minutosAteProximaDose == 0 ? 'Lembrete: agora' : 'Lembrete em ' + minutosAteProximaDose + ' min'}">Próximo lembrete</small><small th:unless="${status.index == 0}" th:text="${medicamento.principioAtivo}">Princípio ativo</small></div><span class="badge" th:text="${status.index == 0 ? 'Próxima dose' : 'Programado'}">Próxima dose</span></div>
                     <div class="empty-state" th:if="${#lists.isEmpty(proximosHorarios)}">Cadastre um horário de uso para ver as próximas doses.</div>
                 </div>
                 <a class="button secondary small" th:href="@{/horarios}" style="width:100%;margin-top:8px">Ver todos os horários</a>

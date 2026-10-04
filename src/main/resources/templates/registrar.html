@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Criar conta | SGM</title>
+    <link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
+</head>
+<body class="login-page">
+<main class="login-card">
+    <div class="login-brand">
+        <span class="brand-shield"><span>+</span><i></i></span>
+        <h1>Criar conta</h1>
+        <p>Cadastre seu e-mail e senha</p>
+    </div>
+    <p th:if="${erro}" th:text="${erro}" style="color:#c54848;text-align:center"></p>
+    <form th:action="@{/registrar}" method="post">
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" th:value="${email}" autocomplete="email" placeholder="Digite seu e-mail" required></div>
+        <div class="field"><label for="senha">Senha</label><input id="senha" name="senha" type="password" autocomplete="new-password" placeholder="Digite sua senha" required></div>
+        <button class="button" type="submit">Cadastrar</button>
+    </form>
+    <p class="login-register" style="text-align:center"><a th:href="@{/}">Voltar para o login</a></p>
+</main>
+</body>
+</html>

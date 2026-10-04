@@ -8,9 +8,9 @@ import com.SGM.repository.MedicamentoRepository;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.Comparator;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MedicamentoService {
@@ -39,41 +39,107 @@ public class MedicamentoService {
     }
 
     public int getTotalUnidades() {
-        return repository.findAll().stream()
-                .mapToInt(medicamento -> Math.max(0, medicamento.getQuantidade()))
-                .sum();
+        int total = 0;
+        for (Medicamento medicamento : repository.findAll()) {
+            total += Math.max(0, medicamento.getQuantidade());
+        }
+        return total;
     }
 
     public List<Medicamento> getProximosHorarios() {
         LocalDateTime agora = LocalDateTime.now();
-        return repository.findAll().stream()
-                .filter(medicamento -> proximaDose(medicamento, agora) != null)
-                .sorted(Comparator.comparing(medicamento -> proximaDose(medicamento, agora)))
-                .collect(Collectors.toList());
+        List<Medicamento> proximos = new ArrayList<>();
+        for (Medicamento medicamento : repository.findAll()) {
+            if (proximaDose(medicamento, agora) != null) {
+                proximos.add(medicamento);
+            }
+        }
+
+        // Put the soonest dose first with a simple selection sort.
+        for (int i = 0; i < proximos.size(); i++) {
+            int primeiro = i;
+            for (int j = i + 1; j < proximos.size(); j++) {
+                LocalDateTime horarioJ = proximaDose(proximos.get(j), agora);
+                LocalDateTime horarioPrimeiro = proximaDose(proximos.get(primeiro), agora);
+                if (horarioJ.isBefore(horarioPrimeiro)) {
+                    primeiro = j;
+                }
+            }
+            Medicamento temporario = proximos.get(i);
+            proximos.set(i, proximos.get(primeiro));
+            proximos.set(primeiro, temporario);
+        }
+        return proximos;
+    }
+
+    public long getMinutosAteProximaDose(List<Medicamento> proximos) {
+        if (proximos == null || proximos.isEmpty()) {
+            return -1;
+        }
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime proxima = proximaDose(proximos.get(0), agora);
+        if (proxima == null) {
+            return -1;
+        }
+        return Math.max(0, Duration.between(agora, proxima).toMinutes());
     }
 
     public List<Medicamento> getResumoEstoque() {
-        return repository.findAll().stream()
-                .sorted(Comparator.comparingInt(Medicamento::getQuantidade))
-                .limit(3)
-                .collect(Collectors.toList());
+        List<Medicamento> resumo = new ArrayList<>(repository.findAll());
+        for (int i = 0; i < resumo.size(); i++) {
+            int menor = i;
+            for (int j = i + 1; j < resumo.size(); j++) {
+                if (resumo.get(j).getQuantidade() < resumo.get(menor).getQuantidade()) {
+                    menor = j;
+                }
+            }
+            Medicamento temporario = resumo.get(i);
+            resumo.set(i, resumo.get(menor));
+            resumo.set(menor, temporario);
+        }
+        if (resumo.size() > 3) {
+            return new ArrayList<>(resumo.subList(0, 3));
+        }
+        return resumo;
     }
 
     public List<Medicamento> getMedicamentosEstoqueBaixo() {
-        return repository.findAll().stream()
-                .filter(medicamento -> medicamento.getQuantidade() <= 5)
-                .sorted(Comparator.comparingInt(Medicamento::getQuantidade))
-                .collect(Collectors.toList());
+        List<Medicamento> baixo = new ArrayList<>();
+        for (Medicamento medicamento : repository.findAll()) {
+            if (medicamento.getQuantidade() <= 5) {
+                baixo.add(medicamento);
+            }
+        }
+        for (int i = 0; i < baixo.size(); i++) {
+            int menor = i;
+            for (int j = i + 1; j < baixo.size(); j++) {
+                if (baixo.get(j).getQuantidade() < baixo.get(menor).getQuantidade()) {
+                    menor = j;
+                }
+            }
+            Medicamento temporario = baixo.get(i);
+            baixo.set(i, baixo.get(menor));
+            baixo.set(menor, temporario);
+        }
+        return baixo;
     }
 
     public List<String> getAlertasProximasDoses() {
-        return getProximosHorarios().stream()
-                .limit(3)
-                .filter(medicamento -> medicamento.getQuantidade() <= 5)
-                .map(medicamento -> medicamento.getQuantidade() <= 0
-                        ? "Não há estoque para a próxima dose de " + medicamento.getNome() + "."
-                        : "Estoque baixo para a próxima dose de " + medicamento.getNome() + ".")
-                .collect(Collectors.toList());
+        List<String> alertas = new ArrayList<>();
+        List<Medicamento> proximos = getProximosHorarios();
+        for (Medicamento medicamento : proximos) {
+            if (medicamento.getQuantidade() <= 5) {
+                if (medicamento.getQuantidade() <= 0) {
+                    alertas.add("Não há estoque para a próxima dose de " + medicamento.getNome() + ".");
+                } else {
+                    alertas.add("Estoque baixo para a próxima dose de " + medicamento.getNome() + ".");
+                }
+                if (alertas.size() == 3) {
+                    break;
+                }
+            }
+        }
+        return alertas;
     }
 
     public String validarMedicamento(Medicamento medicamento) {

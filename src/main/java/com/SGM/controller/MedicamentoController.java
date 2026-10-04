@@ -30,9 +30,11 @@ public class MedicamentoController {
 
     @GetMapping("/inicio")
     public String inicio(Model model) {
+        List<Medicamento> proximos = service.getProximosHorarios();
         model.addAttribute("totalMedicamentos", service.getTotalMedicamentos());
         model.addAttribute("totalUnidades", service.getTotalUnidades());
-        model.addAttribute("proximosHorarios", service.getProximosHorarios());
+        model.addAttribute("proximosHorarios", proximos);
+        model.addAttribute("minutosAteProximaDose", service.getMinutosAteProximaDose(proximos));
         model.addAttribute("resumoEstoque", service.getResumoEstoque());
         model.addAttribute("alertasProximasDoses", service.getAlertasProximasDoses());
         return "inicio";
@@ -82,7 +84,9 @@ public class MedicamentoController {
 
     @GetMapping("/horarios")
     public String horarios(Model model) {
-        model.addAttribute("proximosHorarios", service.getProximosHorarios());
+        List<Medicamento> proximos = service.getProximosHorarios();
+        model.addAttribute("proximosHorarios", proximos);
+        model.addAttribute("minutosAteProximaDose", service.getMinutosAteProximaDose(proximos));
         model.addAttribute("alertasProximasDoses", service.getAlertasProximasDoses());
         return "horario";
     }
