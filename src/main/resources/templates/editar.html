@@ -1,71 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Medicamento - SGM</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar Medicamento | SGM</title><link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
 <body>
-
-<h1>Editar Medicamento</h1>
-
-
-<form action="/editar" method="post">
-
-    <input type="hidden" name="id">
-
-
-    <label>Nome do medicamento:</label>
-    <br>
-    <input type="text" name="nome">
-
-    <br><br>
-
-
-    <label>Princípio ativo:</label>
-    <br>
-    <input type="text" name="principioAtivo">
-
-    <br><br>
-
-
-    <label>Quantidade:</label>
-    <br>
-    <input type="number" name="quantidade">
-
-    <br><br>
-
-
-    <label>Validade:</label>
-    <br>
-    <input type="date" name="validade">
-
-    <br><br>
-
-
-    <label>Horário:</label>
-    <br>
-    <input type="time" name="horario">
-
-    <br><br>
-
-
-    <button type="submit">
-        Salvar alterações
-    </button>
-
-
-</form>
-
-
-<br>
-
-<a href="/lista">
-    Voltar para lista
-</a>
-
-
+<aside th:replace="~{fragments :: sidebar('medicamentos')}"></aside>
+<div class="main-column"><header th:replace="~{fragments :: topbar}"></header>
+    <main class="page-content">
+        <div class="page-heading"><div><p class="eyebrow">Medicamentos / Edição</p><h1><span class="heading-icon">✎</span>Editar Medicamento</h1><p>Atualize as informações do medicamento abaixo.</p></div></div>
+        <div class="edit-layout">
+            <section class="card form-card">
+                <h2 class="section-title" style="margin-bottom:18px">Dados do Medicamento</h2>
+                <p role="alert" th:if="${erro}" th:text="${erro}" style="color:#c54848;font-size:11px"></p>
+                <form action="/editar" method="post" th:object="${medicamento}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="form-grid">
+                        <div class="field"><label for="nome">Nome do medicamento</label><input id="nome" type="text" th:field="*{nome}" required></div>
+                        <div class="field"><label for="principioAtivo">Princípio ativo</label><input id="principioAtivo" type="text" th:field="*{principioAtivo}"></div>
+                        <div class="field"><label for="validade">Validade</label><input id="validade" type="date" th:field="*{validade}"></div>
+                        <div class="field"><label for="quantidade">Quantidade em estoque</label><input id="quantidade" type="number" min="0" th:field="*{quantidade}" required></div>
+                        <div class="field full"><label for="horario">Horário de uso</label><input id="horario" type="time" th:field="*{horario}"></div>
+                    </div>
+                    <div class="form-actions"><a class="button secondary" th:href="@{/lista}">Cancelar</a><button class="button green" type="submit">▣&nbsp; Salvar alterações</button></div>
+                </form>
+            </section>
+            <aside class="info-rail">
+                <article class="card info-card"><h3>ⓘ &nbsp;Informações</h3><p>Confira os campos antes de salvar. As alterações serão atualizadas no cadastro do medicamento.</p></article>
+                <article class="card info-card"><h3>Identificação</h3><p>Medicamento ID<br><strong th:text="${medicamento.id}">#000</strong></p></article>
+            </aside>
+        </div>
+        <a class="back-link" th:href="@{/lista}">← Voltar para a lista</a>
+    </main>
+</div>
 </body>
-
 </html>

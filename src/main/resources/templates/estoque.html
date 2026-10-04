@@ -1,75 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Controle de Estoque - SGM</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Estoque | SGM</title><link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
 <body>
-
-<h1>Controle de Estoque</h1>
-
-
-<table border="1">
-
-    <tr>
-        <th>Medicamento</th>
-        <th>Quantidade disponível</th>
-        <th>Situação</th>
-    </tr>
-
-
-    <tr>
-        <td>Exemplo</td>
-        <td>20 unidades</td>
-        <td>Disponível</td>
-    </tr>
-
-
-</table>
-
-
-<br>
-
-
-<h2>Atualizar estoque</h2>
-
-
-<form>
-
-    <label>Nome do medicamento:</label>
-    <br>
-    <input type="text">
-
-
-    <br><br>
-
-
-    <label>Quantidade:</label>
-    <br>
-    <input type="number">
-
-
-    <br><br>
-
-
-    <button type="submit">
-        Atualizar
-    </button>
-
-
-</form>
-
-
-<br>
-
-
-<a href="/inicio">
-    Voltar ao início
-</a>
-
-
+<aside th:replace="~{fragments :: sidebar('estoque')}"></aside>
+<div class="main-column"><header th:replace="~{fragments :: topbar}"></header>
+    <main class="page-content">
+        <div class="page-heading"><div><p class="eyebrow">Acompanhamento</p><h1><span class="heading-icon">▤</span>Controle de Estoque</h1><p>Acompanhe a quantidade de medicamentos e saiba quando repor.</p></div><a class="button" th:href="@{/cadastro}">＋ Novo medicamento</a></div>
+        <section class="stock-summary">
+            <article class="card stat-card"><span class="stat-icon green">▣</span><div><strong class="stat-value" th:text="${totalMedicamentos}">0</strong><span class="stat-label">Medicamentos cadastrados</span></div></article>
+            <article class="card stat-card"><span class="stat-icon">▤</span><div><strong class="stat-value" th:text="${totalUnidades}">0</strong><span class="stat-label">Unidades em estoque</span></div></article>
+            <article class="card stat-card"><span class="stat-icon purple">✓</span><div><strong class="stat-value" th:text="${#lists.size(medicamentosEstoqueBaixo)}">0</strong><span class="stat-label">Itens em nível baixo</span></div></article>
+        </section>
+        <section class="stock-content">
+            <article class="card card-pad">
+                <div class="card-title-row"><h2>Medicamentos em Estoque</h2><a class="text-link" th:href="@{/lista}">Ver todos</a></div>
+                <div class="search-wrap" style="margin-bottom:12px"><input class="search-input" type="search" placeholder="Pesquisar medicamento..." aria-label="Pesquisar medicamento"></div>
+                <div class="stock-row" th:each="medicamento : ${medicamentos}">
+                    <span class="med-icon">✚</span>
+                    <div class="stock-item"><div><strong th:text="${medicamento.nome}">Medicamento</strong><small th:text="${medicamento.principioAtivo}">Princípio ativo</small></div></div>
+                    <span class="badge" th:text="|${medicamento.quantidade} un.|">0 un.</span>
+                    <span class="stock-count">Limite: 5</span>
+                    <span class="badge" th:classappend="${medicamento.quantidade <= 5} ? ' danger' : ''" th:text="${medicamento.quantidade <= 5} ? 'Repor agora' : 'Adequado'">Adequado</span>
+                    <a class="action-link edit" th:href="@{/editar(id=${medicamento.id})}" aria-label="Ajustar estoque">✎</a>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(medicamentos)}">Nenhum medicamento cadastrado no estoque.</div>
+            </article>
+            <aside class="card card-pad">
+                <div class="card-title-row"><h2>⚠ Avisos de reposição</h2></div>
+                <div class="stock-alert">
+                    <div class="alert-item" th:each="medicamento : ${medicamentosEstoqueBaixo}"><strong th:text="${medicamento.nome}">Medicamento</strong><p>Estoque baixo. Verifique a quantidade disponível para evitar falta.</p><span class="badge danger" th:text="|${medicamento.quantidade} unidade(s)|">0 unidades</span></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(medicamentosEstoqueBaixo)}">Nenhum aviso de reposição no momento.</div>
+                </div>
+                <a class="button secondary small" th:href="@{/cadastro}" style="width:100%;margin-top:14px">＋ Cadastrar medicamento</a>
+            </aside>
+        </section>
+    </main>
+</div>
 </body>
-
 </html>

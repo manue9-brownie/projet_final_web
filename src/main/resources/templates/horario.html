@@ -1,75 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Horários e Alertas - SGM</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Horários | SGM</title><link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
 <body>
-
-<h1>Horários e Alertas</h1>
-
-
-<table border="1">
-
-    <tr>
-        <th>Medicamento</th>
-        <th>Horário de uso</th>
-        <th>Alerta</th>
-    </tr>
-
-
-    <tr>
-        <td>Exemplo</td>
-        <td>08:00</td>
-        <td>Tomar medicamento</td>
-    </tr>
-
-
-</table>
-
-
-<br>
-
-
-<h2>Cadastrar novo horário</h2>
-
-
-<form>
-
-    <label>Nome do medicamento:</label>
-    <br>
-    <input type="text">
-
-
-    <br><br>
-
-
-    <label>Horário:</label>
-    <br>
-    <input type="time">
-
-
-    <br><br>
-
-
-    <button type="submit">
-        Salvar horário
-    </button>
-
-
-</form>
-
-
-<br>
-
-
-<a href="/inicio">
-    Voltar ao início
-</a>
-
-
+<aside th:replace="~{fragments :: sidebar('horarios')}"></aside>
+<div class="main-column"><header th:replace="~{fragments :: topbar}"></header>
+    <main class="page-content">
+        <div class="page-heading"><div><p class="eyebrow">Rotina de cuidados</p><h1><span class="heading-icon">◷</span>Horários e Lembretes</h1><p>Acompanhe os horários de uso informados para cada medicamento.</p></div><a class="button" th:href="@{/cadastro}">＋ Novo medicamento</a></div>
+        <section class="stats-grid">
+            <article class="card stat-card"><span class="stat-icon green">◷</span><div><strong class="stat-value" th:text="${#lists.size(proximosHorarios)}">0</strong><span class="stat-label">Próximas doses programadas</span></div></article>
+            <article class="card stat-card"><span class="stat-icon">✓</span><div><strong class="stat-value" th:text="${#lists.isEmpty(proximosHorarios) ? '—' : proximosHorarios[0].horario}">—</strong><span class="stat-label">Próximo horário</span></div></article>
+            <article class="card stat-card"><span class="stat-icon purple">♧</span><div><strong class="stat-value" th:text="${#lists.size(alertasProximasDoses)}">0</strong><span class="stat-label">Alertas de estoque nas próximas doses</span></div></article>
+        </section>
+        <section class="card card-pad">
+            <div class="calendar-bar"><div><p class="eyebrow">Agenda</p><strong>Horários cadastrados</strong></div><span class="badge">Lembrete visual</span></div>
+            <div class="schedule-list">
+                <article class="schedule-row" th:each="medicamento : ${proximosHorarios}">
+                    <span class="schedule-time" th:text="${medicamento.horario}">08:00</span>
+                    <div><div class="schedule-title" th:text="${medicamento.nome}">Medicamento</div><div class="schedule-sub"><span th:text="${medicamento.principioAtivo}">Princípio ativo</span><span th:text="| · ${medicamento.quantidade} unidade(s) em estoque|"> · estoque</span></div></div>
+                    <span class="badge">Próxima dose</span>
+                </article>
+                <div class="empty-state" th:if="${#lists.isEmpty(proximosHorarios)}">Cadastre um medicamento e informe um horário válido para montar sua agenda.</div>
+            </div>
+            <div class="alert-item" th:each="alerta : ${alertasProximasDoses}" style="margin-top:10px"><strong>Atenção ao estoque</strong><p th:text="${alerta}">Alerta de estoque</p></div>
+            </section>
+    </main>
+</div>
 </body>
-
 </html>

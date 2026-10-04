@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: SGM
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:sgm}
+    username: ${DB_USER:sgm}
+    password: ${DB_PASSWORD:sgm_dev_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update

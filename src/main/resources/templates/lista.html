@@ -1,71 +1,35 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Medicamentos - SGM</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Medicamentos | SGM</title><link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
 <body>
-
-<h1>Lista de Medicamentos</h1>
-
-<table border="1">
-
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Princípio Ativo</th>
-        <th>Quantidade</th>
-        <th>Validade</th>
-        <th>Horário</th>
-        <th>Ações</th>
-    </tr>
-
-
-    <tr th:each="medicamento : ${medicamentos}">
-
-        <td th:text="${medicamento.id}"></td>
-
-        <td th:text="${medicamento.nome}"></td>
-
-        <td th:text="${medicamento.principioAtivo}"></td>
-
-        <td th:text="${medicamento.quantidade}"></td>
-
-        <td th:text="${medicamento.validade}"></td>
-
-        <td th:text="${medicamento.horario}"></td>
-
-        <td>
-            <a href="/editar">
-                Editar
-            </a>
-
-            <a href="/excluir">
-                Excluir
-            </a>
-        </td>
-
-    </tr>
-
-
-</table>
-
-
-<br>
-
-<a href="/cadastro">
-    Cadastrar novo medicamento
-</a>
-
-<br><br>
-
-<a href="/inicio">
-    Voltar ao início
-</a>
-
-
+<aside th:replace="~{fragments :: sidebar('medicamentos')}"></aside>
+<div class="main-column"><header th:replace="~{fragments :: topbar}"></header>
+    <main class="page-content">
+        <div class="page-heading"><div><p class="eyebrow">Gerenciamento</p><h1><span class="heading-icon">✚</span>Lista de Medicamentos</h1><p>Visualize e gerencie os medicamentos cadastrados no sistema.</p></div></div>
+        <section class="card card-pad">
+            <div class="toolbar"><div class="search-wrap"><input class="search-input" type="search" placeholder="Pesquisar medicamento..." aria-label="Pesquisar medicamento"></div><a class="button" th:href="@{/cadastro}">＋ Novo Medicamento</a></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Nome do Medicamento</th><th>Princípio ativo</th><th>Quantidade</th><th>Validade</th><th>Horário de Uso</th><th>Ações</th></tr></thead>
+                    <tbody>
+                    <tr th:each="medicamento : ${medicamentos}">
+                        <td th:text="${medicamento.nome}">Losartana</td>
+                        <td th:text="${medicamento.principioAtivo}">50 mg</td>
+                        <td th:text="${medicamento.quantidade}">30</td>
+                        <td th:text="${medicamento.validade}">2026-12-30</td>
+                        <td th:text="${medicamento.horario}">08:00</td>
+                        <td><div class="table-actions"><a class="action-link" th:href="@{/editar(id=${medicamento.id})}" title="Visualizar" aria-label="Visualizar">◉</a><a class="action-link edit" th:href="@{/editar(id=${medicamento.id})}" title="Editar" aria-label="Editar">✎</a><a class="action-link delete" th:href="@{/excluir(id=${medicamento.id})}" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este medicamento?')">▣</a></div></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(medicamentos)}"><td colspan="6" class="empty-state">Nenhum medicamento cadastrado. Use “Novo Medicamento” para começar.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer"><span><span th:text="${#lists.size(medicamentos)}">0</span> medicamento(s) cadastrado(s)</span><div class="pagination"><span class="page-number active">1</span></div></div>
+        </section>
+    </main>
+</div>
 </body>
-
 </html>

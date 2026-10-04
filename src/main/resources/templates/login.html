@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login - SGM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Entrar | SGM</title>
+    <link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
-<body>
-
-<h1>Sistema de Gestão de Medicamentos</h1>
-
-<form>
-
-    <label>Usuário:</label>
-    <input type="text">
-
-    <br><br>
-
-    <label>Senha:</label>
-    <input type="password">
-
-    <br><br>
-
-    <button type="submit">
-        Entrar
-    </button>
-
-</form>
-
+<body class="login-page">
+<main class="login-card">
+    <div class="login-brand">
+        <span class="brand-shield"><span>+</span><i></i></span>
+        <h1>SGM</h1>
+        <p>Sistema de Gestão de Medicamentos</p>
+    </div>
+    <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" placeholder="Digite seu e-mail"></div>
+    <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha"></div>
+    <a class="button" th:href="@{/inicio}">Entrar</a>
+    <div class="login-note"><span>ⓘ</span> Tela de protótipo; autenticação ainda não está habilitada.</div>
+    <p class="login-footer">SGM - Sistema de Gestão de Medicamentos<br>© 2026 · Todos os direitos reservados.</p>
+</main>
 </body>
 </html>

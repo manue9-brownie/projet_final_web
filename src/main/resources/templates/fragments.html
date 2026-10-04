@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(active)" class="sidebar">
+    <a class="brand" th:href="@{/inicio}">
+        <span class="brand-shield"><span>+</span><i></i></span>
+        <span><strong>SGM</strong><small>Sistema de Gestão<br>de Medicamentos</small></span>
+    </a>
+    <nav class="side-nav" aria-label="Navegação principal">
+        <a th:href="@{/inicio}" th:class="${active == 'inicio' ? 'nav-link active' : 'nav-link'}"><span class="nav-icon">⌂</span>Início</a>
+        <a th:href="@{/lista}" th:class="${active == 'medicamentos' ? 'nav-link active' : 'nav-link'}"><span class="nav-icon">✚</span>Medicamentos</a>
+        <a th:href="@{/horarios}" th:class="${active == 'horarios' ? 'nav-link active' : 'nav-link'}"><span class="nav-icon">◷</span>Horários</a>
+        <a th:href="@{/estoque}" th:class="${active == 'estoque' ? 'nav-link active' : 'nav-link'}"><span class="nav-icon">▤</span>Estoque</a>
+        <a th:href="@{/}" class="nav-link"><span class="nav-icon">♙</span>Perfil</a>
+    </nav>
+    <a th:href="@{/}" class="logout"><span class="nav-icon">⇥</span>Sair</a>
+</aside>
+<header th:fragment="topbar" class="topbar">
+    <button class="menu-button" type="button" aria-label="Menu">☰</button>
+    <div class="topbar-spacer"></div>
+    <button class="icon-button notification" type="button" aria-label="Notificações">♧<span></span></button>
+    <button class="profile-button" type="button"><span class="avatar">MM</span><span class="profile-name">Maria Model</span><span class="chevron">⌄</span></button>
+</header>
+</body>
+</html>

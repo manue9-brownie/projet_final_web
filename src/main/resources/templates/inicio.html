@@ -1,45 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Início - SGM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Início | SGM</title>
+    <link rel="stylesheet" th:href="@{/sgm.css}" href="/sgm.css">
 </head>
-
 <body>
-
-<h1>Bem-vindo ao Sistema de Gestão de Medicamentos</h1>
-
-<h2>Menu Principal</h2>
-
-<ul>
-
-    <li>
-        <a href="/cadastro">
-            Cadastro de Medicamentos
-        </a>
-    </li>
-
-    <li>
-        <a href="/lista">
-            Lista de Medicamentos
-        </a>
-    </li>
-
-    <li>
-        <a href="/estoque">
-            Controle de Estoque
-        </a>
-    </li>
-
-    <li>
-        <a href="/horarios">
-            Horários e Alertas
-        </a>
-    </li>
-
-</ul>
-
+<aside th:replace="~{fragments :: sidebar('inicio')}"></aside>
+<div class="main-column">
+    <header th:replace="~{fragments :: topbar}"></header>
+    <main class="page-content">
+        <div class="page-heading">
+            <div><p class="eyebrow">Painel geral</p><h1>Resumo dos medicamentos</h1><p>Informações baseadas nos seus medicamentos cadastrados.</p></div>
+            <a class="button" th:href="@{/cadastro}">＋ Novo medicamento</a>
+        </div>
+        <section class="stats-grid" aria-label="Resumo">
+            <article class="card stat-card"><span class="stat-icon">✚</span><div><strong class="stat-value" th:text="${totalMedicamentos}">0</strong><span class="stat-label">Medicamentos cadastrados</span></div></article>
+            <article class="card stat-card"><span class="stat-icon green">◷</span><div><strong class="stat-value" th:text="${#lists.size(proximosHorarios)}">0</strong><span class="stat-label">Próximas doses programadas</span></div></article>
+            <article class="card stat-card"><span class="stat-icon purple">▤</span><div><strong class="stat-value" th:text="${totalUnidades}">0</strong><span class="stat-label">Unidades em estoque</span></div></article>
+        </section>
+        <section class="dashboard-grid">
+            <article class="card card-pad">
+                <div class="card-title-row"><h2>Próximos horários</h2><a class="text-link" th:href="@{/horarios}">Ver todos</a></div>
+                <div class="mini-list">
+                    <div class="mini-row" th:each="medicamento : ${proximosHorarios}"><span class="time-pill" th:text="${medicamento.horario}">08:00</span><div class="row-main"><strong th:text="${medicamento.nome}">Medicamento</strong><small th:text="${medicamento.principioAtivo}">Princípio ativo</small></div><span class="badge">Próxima dose</span></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(proximosHorarios)}">Cadastre um horário de uso para ver as próximas doses.</div>
+                </div>
+                <a class="button secondary small" th:href="@{/horarios}" style="width:100%;margin-top:8px">Ver todos os horários</a>
+            </article>
+            <article class="card card-pad">
+                <div class="card-title-row"><h2>Estoque</h2><a class="text-link" th:href="@{/estoque}">Ver estoque completo</a></div>
+                <div class="stock-list">
+                    <div class="stock-item" th:each="medicamento : ${resumoEstoque}"><div><strong th:text="${medicamento.nome}">Medicamento</strong><small th:text="${medicamento.quantidade <= 5} ? 'Estoque baixo' : 'Estoque adequado'">Status do estoque</small></div><span class="stock-count" th:text="|${medicamento.quantidade} un.|">0 un.</span></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(resumoEstoque)}">Nenhum medicamento cadastrado.</div>
+                </div>
+                <a class="button secondary small" th:href="@{/estoque}" style="width:100%;margin-top:12px">Ver controle de estoque</a>
+            </article>
+        </section>
+        <div class="notice" th:if="${!#lists.isEmpty(proximosHorarios) and #lists.isEmpty(alertasProximasDoses)}"><span>✓</span><div><strong>Tudo em dia!</strong>As próximas doses têm estoque suficiente.</div></div>
+        <div class="notice" th:if="${#lists.isEmpty(proximosHorarios)}"><span>◷</span><div><strong>Sem horários cadastrados.</strong>Informe o horário de uso para acompanhar as próximas doses.</div></div>
+        <div class="alert-item" th:each="alerta : ${alertasProximasDoses}" style="margin-top:12px"><strong>Atenção à próxima dose</strong><p th:text="${alerta}">Alerta de estoque</p></div>
+    </main>
+</div>
 </body>
-
 </html>
